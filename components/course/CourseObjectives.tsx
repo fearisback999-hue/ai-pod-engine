@@ -17,7 +17,7 @@ export function CourseObjectives() {
         {COURSE_OBJECTIVES.map((objective, index) => (
           <motion.div
             key={index}
-            initial={{ opacity: 0, y: 12 }}
+            initial={{ y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-20px" }}
             transition={{ delay: index * 0.03, duration: 0.3 }}

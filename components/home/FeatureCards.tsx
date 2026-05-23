@@ -57,7 +57,7 @@ export function FeatureCards() {
       <div className="absolute inset-0 pattern-dots pointer-events-none" />
       <div className="relative">
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.5 }}
@@ -75,7 +75,7 @@ export function FeatureCards() {
           {features.map((feature, index) => (
             <motion.div
               key={feature.title}
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
               transition={{ delay: index * 0.06, duration: 0.4 }}

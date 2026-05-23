@@ -18,7 +18,7 @@ export function CourseHero() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="text-center max-w-3xl mx-auto"
@@ -38,7 +38,7 @@ export function CourseHero() {
             {badges.map((badge, index) => (
               <motion.div
                 key={badge.label}
-                initial={{ opacity: 0, y: 8 }}
+                initial={{ y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 + index * 0.08, duration: 0.3 }}
                 className="flex items-center gap-2 bg-white/[0.06] backdrop-blur-sm border border-white/[0.08] rounded-full px-4 py-2"

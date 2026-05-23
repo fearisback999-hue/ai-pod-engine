@@ -36,8 +36,13 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
-        heading: ["'Plus Jakarta Sans'", "system-ui", "sans-serif"],
+        sans: ["var(--font-sans)", "Inter", "system-ui", "sans-serif"],
+        heading: [
+          "var(--font-heading)",
+          "'Plus Jakarta Sans'",
+          "system-ui",
+          "sans-serif",
+        ],
       },
       letterSpacing: {
         tightest: "-0.04em",

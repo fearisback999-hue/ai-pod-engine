@@ -20,7 +20,7 @@ export function WhyChooseUs() {
       <div className="absolute right-0 top-0 w-1/3 h-full bg-gradient-to-l from-navy-50/50 to-transparent pointer-events-none" />
       <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
@@ -54,7 +54,7 @@ export function WhyChooseUs() {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.15, duration: 0.5 }}

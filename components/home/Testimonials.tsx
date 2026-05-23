@@ -26,7 +26,7 @@ export function Testimonials() {
       <div className="absolute inset-0 bg-gradient-to-b from-white via-navy-50/30 to-white pointer-events-none" />
       <div className="relative">
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.5 }}
@@ -44,7 +44,7 @@ export function Testimonials() {
           {TESTIMONIALS.map((testimonial, index) => (
             <motion.div
               key={testimonial.name}
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
               transition={{ delay: index * 0.08, duration: 0.4 }}

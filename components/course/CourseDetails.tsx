@@ -12,7 +12,7 @@ export function CourseDetails() {
     <Section>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-14">
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
@@ -49,7 +49,7 @@ export function CourseDetails() {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1, duration: 0.5 }}

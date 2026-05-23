@@ -89,7 +89,7 @@ export function ContactInfo() {
           {contactCards.map((card, index) => (
             <motion.div
               key={card.title}
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.06, duration: 0.4 }}
               className="bg-white rounded-2xl p-6 border border-gray-100 shadow-card text-center"
@@ -126,7 +126,7 @@ export function ContactInfo() {
 
           {submitted ? (
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
+              initial={{ scale: 0.97 }}
               animate={{ opacity: 1, scale: 1 }}
               className="text-center py-10"
             >
@@ -145,7 +145,7 @@ export function ContactInfo() {
             </motion.div>
           ) : (
             <motion.form
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
               onSubmit={handleSubmit}

@@ -49,7 +49,7 @@ export function PaymentContent() {
     return (
       <Section className="pt-8 sm:pt-28">
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
+          initial={{ scale: 0.97 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.4 }}
           className="max-w-lg mx-auto text-center"
@@ -107,7 +107,7 @@ export function PaymentContent() {
     return (
       <Section className="pt-8 sm:pt-28">
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
+          initial={{ scale: 0.97 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.4 }}
           className="max-w-lg mx-auto text-center"
@@ -170,7 +170,7 @@ export function PaymentContent() {
   return (
     <Section className="pt-28">
       <motion.div
-        initial={{ opacity: 0, y: 16 }}
+        initial={{ y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
         className="max-w-lg mx-auto"

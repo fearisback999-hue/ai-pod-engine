@@ -17,7 +17,7 @@ export function CourseSchedule() {
         {COURSE_SCHEDULE.map((day, index) => (
           <motion.div
             key={day.day}
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: index * 0.08, duration: 0.4 }}

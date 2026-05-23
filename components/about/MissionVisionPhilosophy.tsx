@@ -35,7 +35,7 @@ export function MissionVisionPhilosophy() {
         {items.map((item, index) => (
           <motion.div
             key={item.title}
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: index * 0.1, duration: 0.4 }}
