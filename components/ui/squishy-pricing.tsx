@@ -65,7 +65,7 @@ export const PricingSection = () => {
               </div>
               <a
                 href="/register"
-                className="inline-block rounded-xl border-2 border-white bg-white px-8 py-3 text-center font-semibold uppercase text-navy-800 transition-[transform,box-shadow] duration-150 ease-out-expo hover:shadow-card-elevated active:scale-[0.97] active:duration-100 focus:outline-none focus:ring-2 focus:ring-white/50"
+                className="inline-block rounded-xl border-2 border-white bg-white px-8 py-3 text-center font-semibold uppercase text-navy-800 transition-[transform,box-shadow] duration-150 ease-out-expo hover:shadow-card-elevated active:scale-[0.97] active:duration-100 focus:outline-none focus:ring-2 focus:ring-white/50 pulse-glow-white"
               >
                 Enroll Now
               </a>

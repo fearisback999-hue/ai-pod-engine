@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/Button";
@@ -201,13 +202,36 @@ function HeartEye({ className }: { className?: string }) {
   );
 }
 
-function RobotHeartEyes() {
+function RobotHeartEyes({ mouseOffset }: { mouseOffset: { x: number; y: number } }) {
+  const eyeBaseTop = 33;
+  const leftEyeBaseLeft = 40;
+  const rightEyeBaseLeft = 58;
+  const maxShiftX = 8;
+  const maxShiftY = 5;
+
+  const shiftX = mouseOffset.x * maxShiftX;
+  const shiftY = mouseOffset.y * maxShiftY;
+
   return (
     <div className="absolute inset-0 pointer-events-none z-10">
-      <div className="absolute" style={{ top: "33%", left: "40%", transform: "translate(-50%, -50%)" }}>
+      <div
+        className="absolute transition-[top,left] duration-100 ease-out"
+        style={{
+          top: `${eyeBaseTop + shiftY}%`,
+          left: `${leftEyeBaseLeft + shiftX}%`,
+          transform: "translate(-50%, -50%)",
+        }}
+      >
         <HeartEye className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 drop-shadow-[0_0_8px_rgba(255,77,106,0.6)]" />
       </div>
-      <div className="absolute" style={{ top: "33%", left: "58%", transform: "translate(-50%, -50%)" }}>
+      <div
+        className="absolute transition-[top,left] duration-100 ease-out"
+        style={{
+          top: `${eyeBaseTop + shiftY}%`,
+          left: `${rightEyeBaseLeft + shiftX}%`,
+          transform: "translate(-50%, -50%)",
+        }}
+      >
         <HeartEye className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 drop-shadow-[0_0_8px_rgba(255,77,106,0.6)]" />
       </div>
     </div>
@@ -222,6 +246,22 @@ const statItems = [
 ];
 
 export function Hero() {
+  const splineContainerRef = useRef<HTMLDivElement>(null);
+  const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    const container = splineContainerRef.current;
+    if (!container) return;
+    const rect = container.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+    const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+    setMouseOffset({ x: Math.max(-1, Math.min(1, x)), y: Math.max(-1, Math.min(1, y)) });
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setMouseOffset({ x: 0, y: 0 });
+  }, []);
+
   return (
     <section className="relative min-h-[100dvh] flex items-center gradient-navy overflow-hidden pt-20">
       <div className="absolute inset-0 pattern-grid" />
@@ -331,6 +371,9 @@ export function Hero() {
 
             {/* Right: 3D Spline Scene */}
             <motion.div
+              ref={splineContainerRef}
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
               initial={{ opacity: 0, transform: "scale(0.96)" }}
               animate={{ opacity: 1, transform: "scale(1)" }}
               transition={{ delay: 0.2, duration: 0.8, ease: EASE_OUT_EXPO }}
@@ -342,7 +385,7 @@ export function Hero() {
                   className="w-full h-full"
                 />
               </div>
-              <RobotHeartEyes />
+              <RobotHeartEyes mouseOffset={mouseOffset} />
             </motion.div>
           </div>
         </Card>
