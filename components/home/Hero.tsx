@@ -181,7 +181,7 @@ function RobotChestOverlay() {
         animate={visible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
         transition={{ duration: 1.2, ease: [0.23, 1, 0.32, 1] }}
         className="absolute z-0 flex items-start justify-center"
-        style={{ top: "-20%", left: "-10%", transform: "translateX(-50%)", width: "102%", height: "102%" }}
+        style={{ top: "-27.5%", left: "-10%", transform: "translateX(-50%)", width: "120%", height: "120%" }}
       >
         <motion.svg
           animate={visible ? { scale: [1, 1.04, 1, 1.06, 1] } : {}}
@@ -191,23 +191,30 @@ function RobotChestOverlay() {
             ease: [0.23, 1, 0.32, 1],
             times: [0, 0.15, 0.3, 0.45, 0.7],
           }}
-          viewBox="0 0 200 280"
+          viewBox="-60 -60 320 320"
           className="w-full h-full"
           preserveAspectRatio="xMidYMid meet"
           fill="none"
         >
           <defs>
-            {/* Soft red halo behind the heart */}
+            {/* Warm orange-red halo behind the heart */}
             <radialGradient id="neon-heart-halo" cx="50%" cy="50%" r="55%">
-              <stop offset="0%" stopColor="#FF1A1A" stopOpacity="0.55" />
-              <stop offset="50%" stopColor="#FF0000" stopOpacity="0.2" />
+              <stop offset="0%" stopColor="#FF6A00" stopOpacity="0.55" />
+              <stop offset="50%" stopColor="#FF1A1A" stopOpacity="0.22" />
               <stop offset="100%" stopColor="#FF0000" stopOpacity="0" />
             </radialGradient>
 
+            {/* Stroke gradient — orange to red neon tube */}
+            <linearGradient id="neon-heart-stroke" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#FFB347" />
+              <stop offset="40%" stopColor="#FF5A1F" />
+              <stop offset="100%" stopColor="#FF1A1A" />
+            </linearGradient>
+
             {/* Heavy outer bloom for the neon spread */}
             <filter id="neon-heart-bloom" x="-100%" y="-100%" width="300%" height="300%">
-              <feGaussianBlur stdDeviation="18" result="b1" />
-              <feGaussianBlur in="SourceGraphic" stdDeviation="32" result="b2" />
+              <feGaussianBlur stdDeviation="20" result="b1" />
+              <feGaussianBlur in="SourceGraphic" stdDeviation="38" result="b2" />
               <feMerge>
                 <feMergeNode in="b2" />
                 <feMergeNode in="b1" />
@@ -215,10 +222,10 @@ function RobotChestOverlay() {
               </feMerge>
             </filter>
 
-            {/* Medium glow around the tube */}
+            {/* Tight tube glow */}
             <filter id="neon-heart-glow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="3.5" result="g1" />
-              <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="g2" />
+              <feGaussianBlur stdDeviation="4" result="g1" />
+              <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="g2" />
               <feMerge>
                 <feMergeNode in="g2" />
                 <feMergeNode in="g1" />
@@ -227,90 +234,64 @@ function RobotChestOverlay() {
             </filter>
           </defs>
 
-          {/* Ambient red halo */}
-          <ellipse cx="100" cy="140" rx="100" ry="120" fill="url(#neon-heart-halo)" filter="url(#neon-heart-bloom)" />
+          {/* Ambient halo */}
+          <ellipse cx="100" cy="95" rx="130" ry="115" fill="url(#neon-heart-halo)" filter="url(#neon-heart-bloom)" />
 
-          {/* Aortic arch and pulmonary trunk on top — large curved tubes */}
-          <g stroke="#ff1a1a" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" fill="none" filter="url(#neon-heart-glow)">
-            {/* Aortic arch — big curve from heart up and over to right */}
-            <path d="M 88 78 C 88 50, 118 32, 138 42 C 152 50, 155 65, 145 72" />
-            {/* Pulmonary trunk — second arch slightly inside */}
-            <path d="M 108 72 C 115 48, 138 38, 152 50 C 160 58, 156 70, 148 72" />
-            {/* Right side superior vena cava tube */}
-            <path d="M 132 80 C 142 60, 155 55, 162 65 C 165 72, 160 80, 152 82" />
-            {/* Left vein curl */}
-            <path d="M 78 80 C 70 65, 62 60, 56 70" />
-          </g>
-
-          {/* Main anatomical heart body — pear-shaped with point at bottom */}
+          {/* Outer wide bloom */}
           <path
-            d="M 88 78
-               C 65 78, 42 92, 38 122
-               C 35 152, 48 185, 70 210
-               C 85 230, 98 248, 102 260
-               C 108 245, 122 225, 138 205
-               C 158 178, 168 148, 162 118
-               C 156 90, 138 75, 118 78
-               C 110 80, 96 80, 88 78 Z"
-            stroke="#ff1a1a"
-            strokeWidth="4"
+            d="M100 175 C 50 135, 15 100, 15 65 C 15 35, 40 15, 65 15 C 80 15, 92 22, 100 35 C 108 22, 120 15, 135 15 C 160 15, 185 35, 185 65 C 185 100, 150 135, 100 175 Z"
+            stroke="url(#neon-heart-stroke)"
+            strokeWidth="16"
             strokeLinejoin="round"
-            strokeLinecap="round"
+            fill="none"
+            filter="url(#neon-heart-bloom)"
+            opacity="0.55"
+          />
+
+          {/* Main neon tube */}
+          <path
+            d="M100 175 C 50 135, 15 100, 15 65 C 15 35, 40 15, 65 15 C 80 15, 92 22, 100 35 C 108 22, 120 15, 135 15 C 160 15, 185 35, 185 65 C 185 100, 150 135, 100 175 Z"
+            stroke="url(#neon-heart-stroke)"
+            strokeWidth="6"
+            strokeLinejoin="round"
+            fill="none"
             filter="url(#neon-heart-glow)"
           />
 
-          {/* Inner coronary arteries — branching pattern like the reference */}
-          <g stroke="#ff1a1a" strokeWidth="2.5" strokeLinecap="round" fill="none" filter="url(#neon-heart-glow)" opacity="0.9">
-            {/* Main left descending artery — diagonal down-right from top */}
-            <path d="M 105 90 C 100 120, 92 150, 85 185" />
-            {/* Right coronary artery — curves around the right side */}
-            <path d="M 118 90 C 125 115, 130 145, 125 180" />
-            {/* Cross branches */}
-            <path d="M 75 145 C 90 148, 110 150, 130 148" />
-            <path d="M 70 180 C 88 184, 108 184, 125 178" />
-            {/* Small branch off the LAD */}
-            <path d="M 95 130 C 85 138, 78 145, 72 155" />
-          </g>
-
-          {/* Inner bright white-pink highlight stroke */}
+          {/* Hot inner core line */}
           <path
-            d="M 88 78
-               C 65 78, 42 92, 38 122
-               C 35 152, 48 185, 70 210
-               C 85 230, 98 248, 102 260
-               C 108 245, 122 225, 138 205
-               C 158 178, 168 148, 162 118
-               C 156 90, 138 75, 118 78
-               C 110 80, 96 80, 88 78 Z"
-            stroke="#ffe5e5"
-            strokeWidth="1.2"
+            d="M100 175 C 50 135, 15 100, 15 65 C 15 35, 40 15, 65 15 C 80 15, 92 22, 100 35 C 108 22, 120 15, 135 15 C 160 15, 185 35, 185 65 C 185 100, 150 135, 100 175 Z"
+            stroke="#FFE3B0"
+            strokeWidth="1.5"
             strokeLinejoin="round"
-            strokeLinecap="round"
-            opacity="0.85"
+            fill="none"
+            opacity="0.95"
           />
 
-          {/* Spark particles — red glow */}
+          {/* Spark particles — orange/red glow drifting up */}
           {[
-            { cx: 50, cy: 100, r: 1.3 },
-            { cx: 155, cy: 90, r: 1 },
-            { cx: 165, cy: 145, r: 1.2 },
-            { cx: 40, cy: 160, r: 1 },
-            { cx: 100, cy: 55, r: 1.4 },
+            { cx: 30, cy: 80, r: 1.3, color: "#FFB347" },
+            { cx: 170, cy: 70, r: 1, color: "#FF6A00" },
+            { cx: 185, cy: 110, r: 1.2, color: "#FF1A1A" },
+            { cx: 25, cy: 130, r: 1, color: "#FF5A1F" },
+            { cx: 100, cy: 5, r: 1.4, color: "#FFB347" },
+            { cx: 60, cy: 25, r: 1, color: "#FF6A00" },
+            { cx: 140, cy: 25, r: 1.1, color: "#FFB347" },
           ].map((p, i) => (
             <motion.circle
               key={i}
               cx={p.cx}
               cy={p.cy}
               r={p.r}
-              fill="#ff4d4d"
-              animate={visible ? { opacity: [0, 1, 0], cy: [p.cy, p.cy - 8] } : {}}
+              fill={p.color}
+              animate={visible ? { opacity: [0, 1, 0], cy: [p.cy, p.cy - 10] } : {}}
               transition={{
                 duration: 1.5 + i * 0.2,
                 repeat: Infinity,
                 delay: i * 0.3,
                 ease: "easeOut",
               }}
-              style={{ filter: "drop-shadow(0 0 4px #ff1a1a)" }}
+              style={{ filter: `drop-shadow(0 0 4px ${p.color})` }}
             />
           ))}
         </motion.svg>
@@ -329,8 +310,8 @@ function RobotChestOverlay() {
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           className="text-[10px] sm:text-xs lg:text-sm font-extrabold tracking-[0.25em] uppercase whitespace-nowrap"
           style={{
-            color: "#00fff2",
-            textShadow: "0 0 6px rgba(0,255,242,0.9), 0 0 14px rgba(0,255,242,0.5), 0 0 26px rgba(0,255,242,0.25)",
+            color: "#E0C372",
+            textShadow: "0 0 6px rgba(201,168,76,0.9), 0 0 14px rgba(201,168,76,0.5), 0 0 26px rgba(201,168,76,0.25)",
           }}
         >
           Pulse Medication
@@ -343,11 +324,11 @@ function RobotChestOverlay() {
         >
           <defs>
             <linearGradient id="chest-ekg-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#00fff2" stopOpacity="0" />
-              <stop offset="20%" stopColor="#00fff2" stopOpacity="1" />
-              <stop offset="50%" stopColor="#ff2d78" stopOpacity="1" />
-              <stop offset="80%" stopColor="#00fff2" stopOpacity="1" />
-              <stop offset="100%" stopColor="#00fff2" stopOpacity="0" />
+              <stop offset="0%" stopColor="#C9A84C" stopOpacity="0" />
+              <stop offset="20%" stopColor="#E0C372" stopOpacity="1" />
+              <stop offset="50%" stopColor="#FFD27A" stopOpacity="1" />
+              <stop offset="80%" stopColor="#E0C372" stopOpacity="1" />
+              <stop offset="100%" stopColor="#C9A84C" stopOpacity="0" />
             </linearGradient>
             <filter id="chest-ekg-glow">
               <feGaussianBlur stdDeviation="2" result="blur" />
@@ -361,9 +342,9 @@ function RobotChestOverlay() {
           <path
             d="M0,25 L40,25 L55,25 L65,8 L75,42 L85,12 L92,32 L100,20 L108,25 L145,25 L160,25 L170,8 L180,42 L190,12 L200,25"
             fill="none"
-            stroke="#00fff2"
+            stroke="#C9A84C"
             strokeWidth="1"
-            strokeOpacity="0.15"
+            strokeOpacity="0.2"
           />
           <path
             d="M0,25 L40,25 L55,25 L65,8 L75,42 L85,12 L92,32 L100,20 L108,25 L145,25 L160,25 L170,8 L180,42 L190,12 L200,25"
