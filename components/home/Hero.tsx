@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/Button";
@@ -207,44 +207,75 @@ function RobotHeartEyes({ mouseOffset }: { mouseOffset: { x: number; y: number }
   // Base position: where the eyes sit when the mouse is centered.
   // Adjust these % values in your browser DevTools until the hearts
   // sit exactly in the robot's eye sockets.
-  const eyeBaseTop = 38;       // vertical center of eyes (%)
-  const leftEyeBaseLeft = 42;  // left eye horizontal (%)
-  const rightEyeBaseLeft = 56; // right eye horizontal (%)
-  const eyeGap = 14;           // distance between eyes (rightEye - leftEye)
+  const [debugMode, setDebugMode] = useState(false);
+  const [leftEye,  setLeftEye]  = useState({ top: 38, left: 42 });
+  const [rightEye, setRightEye] = useState({ top: 38, left: 56 });
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  // How far the eyes travel when the mouse is at the edge.
-  // The Spline robot head has a subtle parallax — these small values
-  // keep the hearts glued to the sockets rather than drifting.
-  const maxShiftX = 3;   // horizontal shift (%)
-  const maxShiftY = 2.5; // vertical shift (%)
+  useEffect(() => {
+    setDebugMode(window.location.search.includes("debug"));
+  }, []);
 
+  const maxShiftX = 3;
+  const maxShiftY = 2.5;
   const shiftX = mouseOffset.x * maxShiftX;
   const shiftY = mouseOffset.y * maxShiftY;
 
+  function makeDragHandler(setter: (pos: { top: number; left: number }) => void) {
+    return (e: React.MouseEvent) => {
+      if (!debugMode) return;
+      e.preventDefault();
+      const container = containerRef.current;
+      if (!container) return;
+      const onMove = (mv: MouseEvent) => {
+        const rect = container.getBoundingClientRect();
+        const left = Math.round(((mv.clientX - rect.left) / rect.width) * 100);
+        const top  = Math.round(((mv.clientY - rect.top)  / rect.height) * 100);
+        setter({ top, left });
+      };
+      const onUp = () => {
+        window.removeEventListener("mousemove", onMove);
+        window.removeEventListener("mouseup", onUp);
+      };
+      window.addEventListener("mousemove", onMove);
+      window.addEventListener("mouseup", onUp);
+    };
+  }
+
+  const eyes = [
+    { pos: leftEye,  setter: setLeftEye,  label: "L" },
+    { pos: rightEye, setter: setRightEye, label: "R" },
+  ];
+
   return (
-    <div className="absolute inset-0 pointer-events-none z-10">
-      <div
-        className="absolute"
-        style={{
-          top: `${eyeBaseTop + shiftY}%`,
-          left: `${leftEyeBaseLeft + shiftX}%`,
-          transform: "translate(-50%, -50%)",
-          transition: "top 150ms ease-out, left 150ms ease-out",
-        }}
-      >
-        <HeartEye className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 drop-shadow-[0_0_6px_rgba(255,77,106,0.7)]" />
-      </div>
-      <div
-        className="absolute"
-        style={{
-          top: `${eyeBaseTop + shiftY}%`,
-          left: `${rightEyeBaseLeft + shiftX}%`,
-          transform: "translate(-50%, -50%)",
-          transition: "top 150ms ease-out, left 150ms ease-out",
-        }}
-      >
-        <HeartEye className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 drop-shadow-[0_0_6px_rgba(255,77,106,0.7)]" />
-      </div>
+    <div ref={containerRef} className="absolute inset-0 z-10" style={{ pointerEvents: debugMode ? "auto" : "none" }}>
+      {debugMode && (
+        <div className="absolute top-2 left-2 bg-black/80 text-white text-xs px-2 py-1.5 rounded z-20 font-mono leading-5 select-none">
+          <div className="text-yellow-300 font-bold mb-1">DRAG HEARTS ONTO EYES</div>
+          <div>L: top={leftEye.top}% left={leftEye.left}%</div>
+          <div>R: top={rightEye.top}% left={rightEye.left}%</div>
+          <div className="text-green-300 mt-1">Tell Claude these 4 numbers!</div>
+        </div>
+      )}
+      {eyes.map(({ pos, setter, label }) => (
+        <div
+          key={label}
+          onMouseDown={makeDragHandler(setter)}
+          className="absolute"
+          style={{
+            top:       debugMode ? `${pos.top}%`              : `${pos.top  + shiftY}%`,
+            left:      debugMode ? `${pos.left}%`             : `${pos.left + shiftX}%`,
+            transform: "translate(-50%, -50%)",
+            transition: debugMode ? "none" : "top 150ms ease-out, left 150ms ease-out",
+            cursor:    debugMode ? "grab" : "default",
+          }}
+        >
+          {debugMode && (
+            <span className="absolute -top-4 left-1/2 -translate-x-1/2 text-[10px] text-yellow-300 font-bold select-none">{label}</span>
+          )}
+          <HeartEye className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 drop-shadow-[0_0_6px_rgba(255,77,106,0.7)]" />
+        </div>
+      ))}
     </div>
   );
 }
