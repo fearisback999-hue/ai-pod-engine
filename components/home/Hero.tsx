@@ -1,6 +1,5 @@
 "use client";
 
-import { useRef, useState, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/Button";
@@ -165,121 +164,6 @@ function BeatingHeart() {
   );
 }
 
-function HeartEye({ className }: { className?: string }) {
-  return (
-    <motion.svg
-      animate={{ scale: [1, 1.18, 1, 1.22, 1] }}
-      transition={{
-        duration: 0.85,
-        repeat: Infinity,
-        ease: [0.23, 1, 0.32, 1],
-        times: [0, 0.15, 0.3, 0.45, 0.7],
-      }}
-      viewBox="0 0 24 24"
-      className={className}
-      fill="none"
-    >
-      <defs>
-        <radialGradient id="heart-eye-glow" cx="50%" cy="40%" r="60%">
-          <stop offset="0%" stopColor="#FF4D6A" stopOpacity="1" />
-          <stop offset="60%" stopColor="#E8364E" stopOpacity="1" />
-          <stop offset="100%" stopColor="#C41E3A" stopOpacity="0.9" />
-        </radialGradient>
-        <filter id="heart-eye-bloom">
-          <feGaussianBlur stdDeviation="1.5" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-      </defs>
-      <path
-        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-        fill="url(#heart-eye-glow)"
-        filter="url(#heart-eye-bloom)"
-      />
-    </motion.svg>
-  );
-}
-
-function RobotHeartEyes({ mouseOffset }: { mouseOffset: { x: number; y: number } }) {
-  // ── Tuning knobs ──
-  // Base position: where the eyes sit when the mouse is centered.
-  // Adjust these % values in your browser DevTools until the hearts
-  // sit exactly in the robot's eye sockets.
-  const [debugMode, setDebugMode] = useState(false);
-  const [leftEye,  setLeftEye]  = useState({ top: 24, left: 45 });
-  const [rightEye, setRightEye] = useState({ top: 24, left: 53 });
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setDebugMode(window.location.search.includes("debug"));
-  }, []);
-
-  const maxShiftX = 3;
-  const maxShiftY = 2.5;
-  const shiftX = mouseOffset.x * maxShiftX;
-  const shiftY = mouseOffset.y * maxShiftY;
-
-  function makeDragHandler(setter: (pos: { top: number; left: number }) => void) {
-    return (e: React.MouseEvent) => {
-      if (!debugMode) return;
-      e.preventDefault();
-      const container = containerRef.current;
-      if (!container) return;
-      const onMove = (mv: MouseEvent) => {
-        const rect = container.getBoundingClientRect();
-        const left = Math.round(((mv.clientX - rect.left) / rect.width) * 100);
-        const top  = Math.round(((mv.clientY - rect.top)  / rect.height) * 100);
-        setter({ top, left });
-      };
-      const onUp = () => {
-        window.removeEventListener("mousemove", onMove);
-        window.removeEventListener("mouseup", onUp);
-      };
-      window.addEventListener("mousemove", onMove);
-      window.addEventListener("mouseup", onUp);
-    };
-  }
-
-  const eyes = [
-    { pos: leftEye,  setter: setLeftEye,  label: "L" },
-    { pos: rightEye, setter: setRightEye, label: "R" },
-  ];
-
-  return (
-    <div ref={containerRef} className="absolute inset-0 z-10" style={{ pointerEvents: debugMode ? "auto" : "none" }}>
-      {debugMode && (
-        <div className="absolute top-2 left-2 bg-black/80 text-white text-xs px-2 py-1.5 rounded z-20 font-mono leading-5 select-none">
-          <div className="text-yellow-300 font-bold mb-1">DRAG HEARTS ONTO EYES</div>
-          <div>L: top={leftEye.top}% left={leftEye.left}%</div>
-          <div>R: top={rightEye.top}% left={rightEye.left}%</div>
-          <div className="text-green-300 mt-1">Tell Claude these 4 numbers!</div>
-        </div>
-      )}
-      {eyes.map(({ pos, setter, label }) => (
-        <div
-          key={label}
-          onMouseDown={makeDragHandler(setter)}
-          className="absolute"
-          style={{
-            top:       debugMode ? `${pos.top}%`              : `${pos.top  + shiftY}%`,
-            left:      debugMode ? `${pos.left}%`             : `${pos.left + shiftX}%`,
-            transform: "translate(-50%, -50%)",
-            transition: debugMode ? "none" : "top 150ms ease-out, left 150ms ease-out",
-            cursor:    debugMode ? "grab" : "default",
-          }}
-        >
-          {debugMode && (
-            <span className="absolute -top-4 left-1/2 -translate-x-1/2 text-[10px] text-yellow-300 font-bold select-none">{label}</span>
-          )}
-          <HeartEye className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 drop-shadow-[0_0_6px_rgba(255,77,106,0.7)]" />
-        </div>
-      ))}
-    </div>
-  );
-}
-
 const statItems = [
   { value: "4 Days", label: "Intensive Program" },
   { value: "32 Hours", label: "Contact Hours" },
@@ -288,22 +172,6 @@ const statItems = [
 ];
 
 export function Hero() {
-  const splineContainerRef = useRef<HTMLDivElement>(null);
-  const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
-
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    const container = splineContainerRef.current;
-    if (!container) return;
-    const rect = container.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
-    const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
-    setMouseOffset({ x: Math.max(-1, Math.min(1, x)), y: Math.max(-1, Math.min(1, y)) });
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    setMouseOffset({ x: 0, y: 0 });
-  }, []);
-
   return (
     <section className="relative min-h-[100dvh] flex items-center gradient-navy overflow-hidden pt-20">
       <div className="absolute inset-0 pattern-grid" />
@@ -411,15 +279,12 @@ export function Hero() {
               </motion.div>
             </div>
 
-            {/* Right: 3D Spline Scene */}
+            {/* Right: 3D Spline Scene (pointer-events disabled to lock heart eyes in sockets) */}
             <motion.div
-              ref={splineContainerRef}
-              onMouseMove={handleMouseMove}
-              onMouseLeave={handleMouseLeave}
               initial={{ opacity: 0, transform: "scale(0.96)" }}
               animate={{ opacity: 1, transform: "scale(1)" }}
               transition={{ delay: 0.2, duration: 0.8, ease: EASE_OUT_EXPO }}
-              className="flex-1 relative min-h-[400px] lg:min-h-0 overflow-hidden"
+              className="flex-1 relative min-h-[400px] lg:min-h-0 overflow-hidden pointer-events-none"
             >
               <div className="absolute inset-0 flex items-center justify-center">
                 <SplineScene
@@ -427,7 +292,6 @@ export function Hero() {
                   className="w-full h-full"
                 />
               </div>
-              <RobotHeartEyes mouseOffset={mouseOffset} />
             </motion.div>
           </div>
         </Card>
