@@ -288,14 +288,17 @@ function RobotChestOverlay() {
         </motion.svg>
       </motion.div>
 
-      {/* Logo + EKG on robot's RIGHT chest (viewer's left) */}
-      <motion.div
-        initial={{ opacity: 0, x: -10 }}
-        animate={visible ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
-        transition={{ duration: 0.6, delay: 0.3, ease: [0.23, 1, 0.32, 1] }}
-        className="absolute z-20 flex flex-col items-start gap-0.5"
-        style={{ top: "44%", left: "42%", transform: "translate(-50%, -50%)" }}
+      {/* Logo + EKG on robot's RIGHT pec (viewer's upper-left of chest) */}
+      <div
+        className="absolute z-20"
+        style={{ top: "40%", left: "40%", transform: "translate(-50%, -50%) rotate(-6deg)" }}
       >
+        <motion.div
+          initial={{ opacity: 0, x: -10 }}
+          animate={visible ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
+          transition={{ duration: 0.6, delay: 0.3, ease: [0.23, 1, 0.32, 1] }}
+          className="flex flex-col items-start gap-0.5"
+        >
         <motion.span
           animate={visible ? { opacity: [0.7, 1, 0.7] } : {}}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
@@ -348,7 +351,8 @@ function RobotChestOverlay() {
             className="ekg-animate"
           />
         </svg>
-      </motion.div>
+        </motion.div>
+      </div>
     </div>
   );
 }
