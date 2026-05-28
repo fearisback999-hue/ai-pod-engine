@@ -4,6 +4,11 @@ import { createAdminClient } from "@/lib/supabase/server";
 import { SITE_CONFIG } from "@/lib/constants/site";
 import { COURSE_INFO } from "@/lib/constants/course";
 
+const supabaseConfigured =
+  !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
+  !!process.env.SUPABASE_SERVICE_ROLE_KEY;
+const stripeConfigured = !!process.env.STRIPE_SECRET_KEY;
+
 export async function POST(request: Request) {
   try {
     const { registrationId } = await request.json();
@@ -13,6 +18,19 @@ export async function POST(request: Request) {
         { error: "Registration ID is required." },
         { status: 400 }
       );
+    }
+
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
+    if (!supabaseConfigured || !stripeConfigured) {
+      console.warn(
+        "[checkout] Supabase or Stripe keys not set — returning mock success URL so flow continues.",
+        { registrationId, supabaseConfigured, stripeConfigured }
+      );
+      return NextResponse.json({
+        sessionUrl: `${siteUrl}/payment?success=true&mock=true`,
+        mock: true,
+      });
     }
 
     const supabase = createAdminClient();
@@ -35,8 +53,6 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
-
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
     const session = await getStripeServer().checkout.sessions.create({
       line_items: [

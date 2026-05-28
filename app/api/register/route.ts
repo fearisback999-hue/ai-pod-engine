@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
+import { randomUUID } from "crypto";
 import { registrationSchema } from "@/lib/utils/validators";
 import { createAdminClient } from "@/lib/supabase/server";
+
+const supabaseConfigured =
+  !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
+  !!process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 export async function POST(request: Request) {
   try {
@@ -15,6 +20,16 @@ export async function POST(request: Request) {
     }
 
     const data = parsed.data;
+
+    if (!supabaseConfigured) {
+      const registrationId = randomUUID();
+      console.warn(
+        "[register] Supabase env vars not set — returning mock registrationId so form flow continues.",
+        { registrationId, email: data.email }
+      );
+      return NextResponse.json({ registrationId, mock: true });
+    }
+
     const supabase = createAdminClient();
 
     const { data: registration, error } = await supabase
