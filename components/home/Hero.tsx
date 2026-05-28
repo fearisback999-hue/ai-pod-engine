@@ -191,8 +191,8 @@ function RobotChestOverlay() {
             ease: [0.23, 1, 0.32, 1],
             times: [0, 0.15, 0.3, 0.45, 0.7],
           }}
-          viewBox="0 0 200 200"
-          className="w-32 h-32 sm:w-44 sm:h-44 lg:w-56 lg:h-56"
+          viewBox="-60 -60 320 320"
+          className="w-44 h-44 sm:w-60 sm:h-60 lg:w-72 lg:h-72"
           fill="none"
         >
           <defs>
@@ -210,10 +210,29 @@ function RobotChestOverlay() {
               <stop offset="100%" stopColor="#E0C3FC" />
             </linearGradient>
 
-            {/* Heavy smoke/blur glow */}
+            {/* Soft radial halo behind the heart for blended edges */}
+            <radialGradient id="flame-halo" cx="50%" cy="50%" r="60%">
+              <stop offset="0%" stopColor="#FF2D78" stopOpacity="0.45" />
+              <stop offset="40%" stopColor="#9333EA" stopOpacity="0.25" />
+              <stop offset="75%" stopColor="#2563EB" stopOpacity="0.1" />
+              <stop offset="100%" stopColor="#2563EB" stopOpacity="0" />
+            </radialGradient>
+
+            {/* Heavy outer bloom — extends way past stroke for soft falloff */}
+            <filter id="flame-bloom" x="-100%" y="-100%" width="300%" height="300%">
+              <feGaussianBlur stdDeviation="20" result="b1" />
+              <feGaussianBlur in="SourceGraphic" stdDeviation="35" result="b2" />
+              <feMerge>
+                <feMergeNode in="b2" />
+                <feMergeNode in="b1" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+
+            {/* Medium smoke around stroke */}
             <filter id="flame-smoke" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="6" result="blur1" />
-              <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur2" />
+              <feGaussianBlur stdDeviation="8" result="blur1" />
+              <feGaussianBlur in="SourceGraphic" stdDeviation="16" result="blur2" />
               <feMerge>
                 <feMergeNode in="blur2" />
                 <feMergeNode in="blur1" />
@@ -222,13 +241,27 @@ function RobotChestOverlay() {
             </filter>
 
             {/* Turbulent flame distortion */}
-            <filter id="flame-turbulence" x="-20%" y="-20%" width="140%" height="140%">
+            <filter id="flame-turbulence" x="-30%" y="-30%" width="160%" height="160%">
               <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="2" seed="3">
                 <animate attributeName="baseFrequency" dur="6s" values="0.015;0.025;0.015" repeatCount="indefinite" />
               </feTurbulence>
               <feDisplacementMap in="SourceGraphic" scale="6" />
             </filter>
           </defs>
+
+          {/* Soft ambient halo — gradient bloom that fades to transparent */}
+          <ellipse cx="100" cy="100" rx="140" ry="130" fill="url(#flame-halo)" filter="url(#flame-bloom)" />
+
+          {/* Extra-blurred outer smoke layer (no hard edge) */}
+          <path
+            d="M100 175 C 50 135, 15 100, 15 65 C 15 35, 40 15, 65 15 C 80 15, 92 22, 100 35 C 108 22, 120 15, 135 15 C 160 15, 185 35, 185 65 C 185 100, 150 135, 100 175 Z"
+            stroke="url(#flame-heart-grad)"
+            strokeWidth="24"
+            strokeLinejoin="round"
+            fill="none"
+            filter="url(#flame-bloom)"
+            opacity="0.4"
+          />
 
           {/* Outer smoke aura */}
           <path
@@ -296,7 +329,7 @@ function RobotChestOverlay() {
         <motion.div
           initial={{ opacity: 0, x: -10 }}
           animate={visible ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
-          transition={{ duration: 0.6, delay: 0.3, ease: [0.23, 1, 0.32, 1] }}
+          transition={{ duration: 0.6, delay: 1.3, ease: [0.23, 1, 0.32, 1] }}
           className="flex flex-col items-start gap-0.5"
         >
         <motion.span
