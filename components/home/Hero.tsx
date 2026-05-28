@@ -234,13 +234,13 @@ function RobotChestOverlay() {
             </filter>
           </defs>
 
-          {/* Main neon tube — solid red, no surrounding bloom or sparks */}
+          {/* Main neon tube — solid red FILL */}
           <path
             d="M100 175 C 50 135, 15 100, 15 65 C 15 35, 40 15, 65 15 C 80 15, 92 22, 100 35 C 108 22, 120 15, 135 15 C 160 15, 185 35, 185 65 C 185 100, 150 135, 100 175 Z"
             stroke="#FF1A1A"
             strokeWidth="6"
             strokeLinejoin="round"
-            fill="none"
+            fill="#E51919"
             filter="url(#neon-heart-glow)"
           />
 
@@ -261,16 +261,16 @@ function RobotChestOverlay() {
         initial={{ opacity: 0, y: -10 }}
         animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
         transition={{ duration: 0.7, delay: 3, ease: [0.23, 1, 0.32, 1] }}
-        className="absolute z-20 flex flex-col items-end gap-1"
+        className="absolute z-20 flex flex-col items-end gap-1.5 px-3 py-2 rounded-xl backdrop-blur-md bg-black/40 border border-gold-500/20 shadow-lg"
         style={{ top: "5%", right: "5%" }}
       >
         <motion.span
-          animate={visible ? { opacity: [0.7, 1, 0.7] } : {}}
+          animate={visible ? { opacity: [0.85, 1, 0.85] } : {}}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="text-[10px] sm:text-xs lg:text-sm font-extrabold tracking-[0.25em] uppercase whitespace-nowrap"
+          className="text-xs sm:text-sm lg:text-base font-extrabold tracking-[0.25em] uppercase whitespace-nowrap"
           style={{
-            color: "#E0C372",
-            textShadow: "0 0 6px rgba(201,168,76,0.9), 0 0 14px rgba(201,168,76,0.5), 0 0 26px rgba(201,168,76,0.25)",
+            color: "#FFD27A",
+            textShadow: "0 0 8px rgba(255,210,122,1), 0 0 18px rgba(201,168,76,0.7), 0 0 32px rgba(201,168,76,0.35)",
           }}
         >
           Pulse Medication
