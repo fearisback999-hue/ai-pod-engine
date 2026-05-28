@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/Button";
@@ -165,15 +166,29 @@ function BeatingHeart() {
 }
 
 function RobotChestOverlay() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const handleClick = () => {
+      setTimeout(() => setVisible(true), 2000);
+      window.removeEventListener("click", handleClick);
+    };
+    window.addEventListener("click", handleClick);
+    return () => window.removeEventListener("click", handleClick);
+  }, []);
+
   return (
     <div className="absolute inset-0 pointer-events-none z-10 flex items-center justify-center">
-      <div
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={visible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+        transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
         className="absolute flex flex-col items-center"
         style={{ top: "52%", left: "50%", transform: "translate(-50%, -50%)" }}
       >
         {/* Brand name */}
         <motion.span
-          animate={{ opacity: [0.7, 1, 0.7] }}
+          animate={visible ? { opacity: [0.7, 1, 0.7] } : {}}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           className="text-[10px] sm:text-xs lg:text-sm font-extrabold tracking-[0.25em] uppercase mb-1 sm:mb-2"
           style={{
@@ -207,7 +222,6 @@ function RobotChestOverlay() {
               </feMerge>
             </filter>
           </defs>
-          {/* Background dim line */}
           <path
             d="M0,25 L40,25 L55,25 L65,8 L75,42 L85,12 L92,32 L100,20 L108,25 L145,25 L160,25 L170,8 L180,42 L190,12 L200,25"
             fill="none"
@@ -215,7 +229,6 @@ function RobotChestOverlay() {
             strokeWidth="1"
             strokeOpacity="0.15"
           />
-          {/* Neon animated line */}
           <path
             d="M0,25 L40,25 L55,25 L65,8 L75,42 L85,12 L92,32 L100,20 L108,25 L145,25 L160,25 L170,8 L180,42 L190,12 L200,25"
             fill="none"
@@ -228,9 +241,9 @@ function RobotChestOverlay() {
           />
         </svg>
 
-        {/* Neon heart icon below the EKG */}
+        {/* Neon heart icon — bigger */}
         <motion.svg
-          animate={{ scale: [1, 1.15, 1, 1.18, 1] }}
+          animate={visible ? { scale: [1, 1.15, 1, 1.18, 1] } : {}}
           transition={{
             duration: 0.85,
             repeat: Infinity,
@@ -238,7 +251,7 @@ function RobotChestOverlay() {
             times: [0, 0.15, 0.3, 0.45, 0.7],
           }}
           viewBox="0 0 24 24"
-          className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 mt-1"
+          className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 mt-1 sm:mt-2"
           fill="none"
         >
           <defs>
@@ -254,10 +267,10 @@ function RobotChestOverlay() {
             d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
             fill="#ff2d78"
             filter="url(#neon-heart-glow)"
-            style={{ filter: "drop-shadow(0 0 6px rgba(255,45,120,0.8)) drop-shadow(0 0 12px rgba(255,45,120,0.4))" }}
+            style={{ filter: "drop-shadow(0 0 8px rgba(255,45,120,0.9)) drop-shadow(0 0 16px rgba(255,45,120,0.5)) drop-shadow(0 0 30px rgba(255,45,120,0.25))" }}
           />
         </motion.svg>
-      </div>
+      </motion.div>
     </div>
   );
 }
