@@ -182,14 +182,14 @@ export function Hero() {
       <div className="absolute top-20 right-10 w-72 h-72 bg-gold-500/[0.03] rounded-full blur-3xl pulse-slow" />
       <div className="absolute bottom-20 left-10 w-96 h-96 bg-navy-400/[0.06] rounded-full blur-3xl" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 w-full">
         <Card className="w-full border-white/[0.08] bg-black/[0.3] relative overflow-hidden rounded-2xl shadow-glass">
           <Spotlight
             className="-top-40 left-0 md:left-60 md:-top-20"
             fill="white"
           />
 
-          <div className="flex flex-col lg:flex-row min-h-[760px] lg:min-h-[900px]">
+          <div className="flex flex-col lg:flex-row min-h-[760px] lg:min-h-[calc(100dvh-9rem)]">
             {/* Left: Text Content */}
             <div className="flex-1 lg:flex-[0.92] p-8 sm:p-12 lg:p-16 relative z-10 flex flex-col justify-center">
               <motion.div
