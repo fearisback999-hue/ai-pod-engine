@@ -2,7 +2,7 @@
 
 import { Suspense, useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useGLTF, OrbitControls, Environment, Center } from "@react-three/drei";
+import { useGLTF, OrbitControls, Environment, Center, Bounds } from "@react-three/drei";
 import * as THREE from "three";
 
 function HeartModel({ url }: { url: string }) {
@@ -62,7 +62,11 @@ export function GlbHeart({ url = "/models/hero-heart.glb", className }: GlbHeart
         <pointLight position={[0, -2, 4]} intensity={0.6} color="#ffffff" />
 
         <Suspense fallback={null}>
-          <HeartModel url={url} />
+          {/* Bounds auto-fits the model to the frame so it can't be cropped;
+              the small margin keeps a little padding even at the beat's peak. */}
+          <Bounds fit clip observe margin={1.12}>
+            <HeartModel url={url} />
+          </Bounds>
           <Environment preset="studio" />
         </Suspense>
 
