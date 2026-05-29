@@ -10,13 +10,16 @@ function HeartModel({ url }: { url: string }) {
   const groupRef = useRef<THREE.Group>(null);
 
   // This model ships with baked PBR textures (red body, gold coronaries,
-  // pink aorta), so keep its original materials — just hide the stray
-  // leftover "Cube" mesh that came with the export.
+  // pink aorta), so keep its original materials. Fully REMOVE the stray
+  // leftover "Cube" mesh — just hiding it still lets <Bounds> measure it,
+  // which shrinks the whole model.
   const model = useMemo(() => {
     const clone = scene.clone(true);
+    const junk: THREE.Object3D[] = [];
     clone.traverse((child) => {
-      if (child.name === "Cube") child.visible = false;
+      if (child.name === "Cube") junk.push(child);
     });
+    junk.forEach((node) => node.parent?.remove(node));
     return clone;
   }, [scene]);
 
@@ -65,7 +68,7 @@ export function GlbHeart({ url = "/models/hero-heart.glb", className }: GlbHeart
         <Suspense fallback={null}>
           {/* Bounds auto-fits the model to the frame so it can't be cropped;
               the small margin keeps a little padding even at the beat's peak. */}
-          <Bounds fit clip observe margin={1.085}>
+          <Bounds fit clip observe margin={1.04}>
             <HeartModel url={url} />
           </Bounds>
           <Environment preset="studio" />
