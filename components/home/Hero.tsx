@@ -265,7 +265,7 @@ export function Hero() {
             fill="white"
           />
 
-          <div className="flex flex-col lg:flex-row min-h-[600px]">
+          <div className="flex flex-col lg:flex-row min-h-[640px]">
             {/* Left: Text Content */}
             <div className="flex-1 p-8 sm:p-12 lg:p-16 relative z-10 flex flex-col justify-center">
               <motion.div
@@ -360,7 +360,7 @@ export function Hero() {
               initial={{ opacity: 0, transform: "scale(0.96)" }}
               animate={{ opacity: 1, transform: "scale(1)" }}
               transition={{ delay: 0.2, duration: 0.8, ease: EASE_OUT_EXPO }}
-              className="flex-1 relative min-h-[400px] lg:min-h-0 overflow-hidden"
+              className="flex-1 relative min-h-[520px] lg:min-h-0 overflow-visible"
             >
               <RobotChestOverlay />
               <div className="absolute inset-0 z-10">

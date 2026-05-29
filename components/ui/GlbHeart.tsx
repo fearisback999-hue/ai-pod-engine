@@ -1,13 +1,31 @@
 "use client";
 
-import { Suspense, useRef } from "react";
+import { Suspense, useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useGLTF, OrbitControls, Environment, Center } from "@react-three/drei";
 import * as THREE from "three";
 
-function HeartModel({ url }: { url: string }) {
+function HeartModel({ url, color }: { url: string; color: string }) {
   const { scene } = useGLTF(url, true);
   const groupRef = useRef<THREE.Group>(null);
+
+  // The compressed model lost its textures (renders white), so paint it
+  // with an anatomical red, slightly glossy so it catches the lighting.
+  const tinted = useMemo(() => {
+    const clone = scene.clone(true);
+    const base = new THREE.Color(color);
+    clone.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        mesh.material = new THREE.MeshStandardMaterial({
+          color: base,
+          roughness: 0.4,
+          metalness: 0.1,
+        });
+      }
+    });
+    return clone;
+  }, [scene, color]);
 
   useFrame((state) => {
     if (!groupRef.current) return;
@@ -25,7 +43,7 @@ function HeartModel({ url }: { url: string }) {
   return (
     <Center>
       <group ref={groupRef}>
-        <primitive object={scene} />
+        <primitive object={tinted} />
       </group>
     </Center>
   );
@@ -34,23 +52,28 @@ function HeartModel({ url }: { url: string }) {
 interface GlbHeartProps {
   url?: string;
   className?: string;
+  color?: string;
 }
 
-export function GlbHeart({ url = "/models/hero-heart.glb", className }: GlbHeartProps) {
+export function GlbHeart({
+  url = "/models/hero-heart.glb",
+  className,
+  color = "#c4243a",
+}: GlbHeartProps) {
   return (
     <div className={className}>
       <Canvas
-        camera={{ position: [0, 0, 4], fov: 45 }}
+        camera={{ position: [0, 0, 6], fov: 42 }}
         dpr={[1, 2]}
         gl={{ antialias: true, alpha: true }}
       >
-        <ambientLight intensity={0.4} />
-        <directionalLight position={[5, 5, 5]} intensity={1.2} color="#fff5e6" />
-        <directionalLight position={[-5, 3, -2]} intensity={0.6} color="#ff6b8a" />
-        <pointLight position={[0, -3, 3]} intensity={0.5} color="#C9A84C" />
+        <ambientLight intensity={0.5} />
+        <directionalLight position={[5, 5, 5]} intensity={1.3} color="#fff5e6" />
+        <directionalLight position={[-5, 3, -2]} intensity={0.7} color="#ff6b8a" />
+        <pointLight position={[0, -3, 3]} intensity={0.6} color="#C9A84C" />
 
         <Suspense fallback={null}>
-          <HeartModel url={url} />
+          <HeartModel url={url} color={color} />
           <Environment preset="studio" />
         </Suspense>
 
